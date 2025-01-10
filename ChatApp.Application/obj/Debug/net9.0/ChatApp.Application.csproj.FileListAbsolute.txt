@@ -15,3 +15,4 @@
 /Users/macos/Documents/c#/ChatApp/ChatApp.Application/obj/Debug/net9.0/ref/ChatApp.Application.dll
 /Users/macos/Documents/c#/ChatApp/ChatApp.Application/bin/Debug/net9.0/ChatApp.Application.runtimeconfig.json
 /Users/macos/Documents/c#/ChatApp/ChatApp.Application/obj/Debug/net9.0/ChatApp.Application.genruntimeconfig.cache
+/Users/macos/Documents/c#/ChatApp/ChatApp.Application/obj/Debug/net9.0/ChatApp.Application.sourcelink.json

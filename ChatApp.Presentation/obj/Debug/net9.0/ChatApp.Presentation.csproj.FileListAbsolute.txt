@@ -172,3 +172,4 @@
 /Users/macos/Documents/c#/ChatApp/ChatApp.Presentation/bin/Debug/net9.0/AutoMapper.dll
 /Users/macos/Documents/c#/ChatApp/ChatApp.Presentation/bin/Debug/net9.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 /Users/macos/Documents/c#/ChatApp/ChatApp.Presentation/bin/Debug/net9.0/BCrypt.Net-Next.dll
+/Users/macos/Documents/c#/ChatApp/ChatApp.Presentation/obj/Debug/net9.0/ChatApp.Presentation.sourcelink.json

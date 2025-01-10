@@ -8,6 +8,10 @@ namespace ChatApp.Application.Mapping;
 public class MappingProfile : Profile {
    public MappingProfile() {
       CreateMap<RegisterUserDto, UserModel>();
-      CreateMap<UserModel, ResponseUserDto>();
+      CreateMap<UpdateUserDto, UserModel>();
+      CreateMap<UserModel, ResponseUserDto>()
+         .ForMember(dto => dto.DateOfBirth,
+            opt =>
+               opt.MapFrom(src => src.DateOfBirth.ToString("dd/MM/yyyy")));;
    }
 }

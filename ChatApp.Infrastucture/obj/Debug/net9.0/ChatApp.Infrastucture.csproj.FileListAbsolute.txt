@@ -17,3 +17,4 @@
 /Users/macos/Documents/c#/ChatApp/ChatApp.Infrastucture/obj/Debug/net9.0/ChatApp.Infrastucture.pdb
 /Users/macos/Documents/c#/ChatApp/ChatApp.Infrastucture/obj/Debug/net9.0/ChatApp.Infrastucture.genruntimeconfig.cache
 /Users/macos/Documents/c#/ChatApp/ChatApp.Infrastucture/obj/Debug/net9.0/ref/ChatApp.Infrastucture.dll
+/Users/macos/Documents/c#/ChatApp/ChatApp.Infrastucture/obj/Debug/net9.0/ChatApp.Infrastucture.sourcelink.json

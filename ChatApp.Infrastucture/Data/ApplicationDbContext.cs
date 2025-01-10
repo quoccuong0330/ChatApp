@@ -6,7 +6,7 @@ namespace ChatApp.Infrastucture.Data;
 public class ApplicationDbContext : DbContext {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)  { }
 
-    public DbSet<UserModel> User { get; set; }
+    public DbSet<UserModel?> User { get; set; }
     public DbSet<ChatRoomModel> ChatRoom { get; set; }
     public DbSet<MessageModel> Message { get; set; }
     public DbSet<SeenMessageModel> SeenMessage { get; set; }
