@@ -14,6 +14,7 @@ public static class DependencyInjection {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("ChatApp.Infrastucture"));
         });
         services.AddScoped<IUserRepository,UserRepository>();
+        services.AddScoped<IRoomRepository,RoomRepository>();
         return services;
     }
 }
