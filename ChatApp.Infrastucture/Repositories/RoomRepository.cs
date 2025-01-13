@@ -46,15 +46,21 @@ public class RoomRepository : IRoomRepository {
     }
 
     public async Task<ICollection<RoomModel>> GetListRoomByUserId(Guid userId) {
-        var list = await _context.RoomMembers.Where(x=>x.UserId.Equals(userId)).Select(x=>x.RoomId).ToListAsync();
+        var list = await _context.RoomMembers
+            .Where(x=>x.UserId
+                .Equals(userId))
+            .Select(x=>x.RoomId).ToListAsync();
         var listRoom = new List<RoomModel>();
         
-        foreach (var l in list) {
-          listRoom.Add(await _context.Rooms
-              .Include(x=>x.RoomMembers)
-              .Include(x=>x.Messages)
-              .FirstOrDefaultAsync(x=>x.Id.Equals(l)));
+        foreach (var idRoom in list) {
+            listRoom.Add(
+                await _context.Rooms
+                    .Include(x => x.Messages)
+                    .ThenInclude(x => x.User)
+                    .FirstOrDefaultAsync(x => x.Id.Equals(idRoom))
+            );
         }
+
         return listRoom;
     }
 
@@ -66,7 +72,10 @@ public class RoomRepository : IRoomRepository {
     }
 
     public async Task<RoomModel?> UpdateAvatar(Guid idRoom, string avatar) {
-        var room = await _context.Rooms.FirstOrDefaultAsync(x => x.Id.Equals(idRoom));
+        var room = await _context.Rooms
+            .Include(x => x.Messages)
+            .ThenInclude(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id.Equals(idRoom));
         if (room is null) return null;
         room.Avatar = avatar;
         await _context.SaveChangesAsync();
@@ -74,7 +83,10 @@ public class RoomRepository : IRoomRepository {
     }
 
     public async Task<RoomModel?> UpdateName(Guid idRoom, string name) {
-        var room = await _context.Rooms.FirstOrDefaultAsync(x => x.Id.Equals(idRoom));
+        var room = await _context.Rooms
+            .Include(x => x.Messages)
+            .ThenInclude(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id.Equals(idRoom));
         if (room is null) return null;
         room.Name = name;
         await _context.SaveChangesAsync();
@@ -104,8 +116,14 @@ public class RoomRepository : IRoomRepository {
         throw new NotImplementedException();
     }
 
+    public async Task<ICollection<MessageModel>> FindMessageByRoomId(Guid idRoom) {
+        var room = await _context.Rooms.FirstOrDefaultAsync(x => x.Id.Equals(idRoom));
+        return room.Messages;
+    }
+
     public async Task<ICollection<RoomModel>> FindRoomByName(string name) {
-        var listRoom = await _context.Rooms.Where(x => x.Name.Contains(name)).ToListAsync();
+        var listRoom = await _context.Rooms.Include(x=>x.Messages)
+            .ThenInclude(x=>x.User).Where(x => x.Name.Contains(name)).ToListAsync();
         return listRoom;
     }
 }

@@ -1,14 +1,16 @@
+using ChatApp.Application.Dtos.Responses.User;
 using ChatApp.Application.Services;
 using ChatApp.Core.Interfaces;
 using ChatApp.Core.Models;
 using ChatApp.Infrastucture.Data;
+using ChatApp.Infrastucture.SignalR.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Infrastucture.Repositories;
 
 public class UserRepository : IUserRepository {
     private readonly ApplicationDbContext _context;
-    public UserRepository(ApplicationDbContext context) {
+    public UserRepository(ApplicationDbContext context, JwtService jwtService) {
         _context = context;
     }
     
@@ -18,10 +20,10 @@ public class UserRepository : IUserRepository {
         return userModel;
     }
 
-    public async Task<UserModel> Login(string email, string password) {
+    public async Task<UserModel?> Login(string email, string password) {
         var user = await _context.User.FirstOrDefaultAsync(x => x.Email.Equals(email));
         if (user is null) return null;
-        return !PasswordHasher.IsCorrectPassword(password, user.Password) ? null : user;
+        return PasswordHasher.IsCorrectPassword(password, user.Password) ? user : null;
     }
 
     public async Task<UserModel?> GetUser(Guid id) {

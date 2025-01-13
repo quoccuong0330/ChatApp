@@ -9,8 +9,9 @@ public class ApplicationDbContext : DbContext {
 
     public DbSet<UserModel> User { get; set; }
     public DbSet<RoomMemberModel> RoomMembers { get; set; }
-    public DbSet<MessageModel> Messages { get; set; }
+    public DbSet<MessageModel?> Messages { get; set; }
     public DbSet<RoomModel> Rooms { get; set; }
+    public DbSet<RefreshTokenModel> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
@@ -57,6 +58,10 @@ public class ApplicationDbContext : DbContext {
         modelBuilder.Entity<MessageModel>()
             .HasKey(m => m.Id);
 
-       
+        modelBuilder.Entity<UserModel>()
+            .HasMany(u => u.RefreshTokens)
+            .WithOne(u => u.User)
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     } 
 }
