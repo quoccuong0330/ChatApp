@@ -22,7 +22,7 @@ public class ApplicationDbContext : DbContext {
         modelBuilder.Entity<UserModel>()
             .HasMany(u => u.RoomMembers)
             .WithOne(gm => gm.User)
-            .HasForeignKey(gm => gm.UserId);
+            .HasForeignKey(gm => gm.UserId); 
 
         modelBuilder.Entity<UserModel>()
             .HasMany(u => u.Messages)
@@ -36,8 +36,9 @@ public class ApplicationDbContext : DbContext {
         modelBuilder.Entity<RoomModel>()
             .HasMany(g => g.RoomMembers)
             .WithOne(gm => gm.Room)
-            .HasForeignKey(gm => gm.RoomId);
-
+            .HasForeignKey(gm => gm.RoomId)
+            .OnDelete(DeleteBehavior.Cascade);
+            
         modelBuilder.Entity<RoomModel>()
             .HasMany(g => g.Messages)
             .WithOne(m => m.Room)
@@ -47,7 +48,7 @@ public class ApplicationDbContext : DbContext {
             .HasOne(g => g.Owner)
             .WithMany()
             .HasForeignKey(g => g.OwnerId)
-            .OnDelete(DeleteBehavior.Restrict);
+             ;
    
 
         // RoomMember Entity Configuration
