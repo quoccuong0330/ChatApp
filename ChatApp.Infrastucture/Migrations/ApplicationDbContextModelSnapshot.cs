@@ -22,117 +22,112 @@ namespace ChatApp.Infrastucture.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ChatApp.Core.Models.ChatRoomModel", b =>
-                {
-                    b.Property<Guid>("IdRoom")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("LastMessageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("IdRoom");
-
-                    b.HasIndex("LastMessageId")
-                        .IsUnique()
-                        .HasFilter("[LastMessageId] IS NOT NULL");
-
-                    b.ToTable("ChatRoom");
-                });
-
             modelBuilder.Entity("ChatApp.Core.Models.MessageModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("MessageType")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SenderId")
+                    b.Property<Guid>("UserIdCreate")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
-                    b.HasIndex("SenderId");
+                    b.HasIndex("UserIdCreate");
 
-                    b.ToTable("Message");
+                    b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("ChatApp.Core.Models.SeenMessageModel", b =>
+            modelBuilder.Entity("ChatApp.Core.Models.RefreshTokenModel", b =>
                 {
-                    b.Property<Guid>("RoomId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("SeenAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("RoomId", "MessageId", "UserId");
-
-                    b.HasIndex("MessageId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SeenMessage");
+                    b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("ChatApp.Core.Models.UserChatRoomModel", b =>
+            modelBuilder.Entity("ChatApp.Core.Models.RoomMemberModel", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("JoinedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoomId");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("UserChatRoom");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RoomMembers");
+                });
+
+            modelBuilder.Entity("ChatApp.Core.Models.RoomModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("ChatApp.Core.Models.UserModel", b =>
@@ -153,14 +148,10 @@ namespace ChatApp.Infrastucture.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -171,101 +162,80 @@ namespace ChatApp.Infrastucture.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("ChatApp.Core.Models.ChatRoomModel", b =>
-                {
-                    b.HasOne("ChatApp.Core.Models.MessageModel", "LastMessage")
-                        .WithOne()
-                        .HasForeignKey("ChatApp.Core.Models.ChatRoomModel", "LastMessageId");
-
-                    b.Navigation("LastMessage");
-                });
-
             modelBuilder.Entity("ChatApp.Core.Models.MessageModel", b =>
                 {
-                    b.HasOne("ChatApp.Core.Models.ChatRoomModel", "Room")
+                    b.HasOne("ChatApp.Core.Models.RoomModel", "Room")
                         .WithMany("Messages")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ChatApp.Core.Models.UserModel", "Sender")
-                        .WithMany("Messages")
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Room");
-
-                    b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("ChatApp.Core.Models.SeenMessageModel", b =>
-                {
-                    b.HasOne("ChatApp.Core.Models.MessageModel", "Message")
-                        .WithMany("SeenMessages")
-                        .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ChatApp.Core.Models.ChatRoomModel", "Room")
-                        .WithMany("SeenMessages")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ChatApp.Core.Models.UserModel", "User")
-                        .WithMany("SeenMessages")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany("Messages")
+                        .HasForeignKey("UserIdCreate")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Message");
 
                     b.Navigation("Room");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ChatApp.Core.Models.UserChatRoomModel", b =>
+            modelBuilder.Entity("ChatApp.Core.Models.RefreshTokenModel", b =>
                 {
-                    b.HasOne("ChatApp.Core.Models.ChatRoomModel", "ChatRoom")
-                        .WithMany("UserChatRooms")
+                    b.HasOne("ChatApp.Core.Models.UserModel", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChatApp.Core.Models.RoomMemberModel", b =>
+                {
+                    b.HasOne("ChatApp.Core.Models.RoomModel", "Room")
+                        .WithMany("RoomMembers")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ChatApp.Core.Models.UserModel", "User")
-                        .WithMany("UserChatRooms")
+                        .WithMany("RoomMembers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ChatRoom");
+                    b.Navigation("Room");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ChatApp.Core.Models.ChatRoomModel", b =>
+            modelBuilder.Entity("ChatApp.Core.Models.RoomModel", b =>
+                {
+                    b.HasOne("ChatApp.Core.Models.UserModel", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("ChatApp.Core.Models.RoomModel", b =>
                 {
                     b.Navigation("Messages");
 
-                    b.Navigation("SeenMessages");
-
-                    b.Navigation("UserChatRooms");
-                });
-
-            modelBuilder.Entity("ChatApp.Core.Models.MessageModel", b =>
-                {
-                    b.Navigation("SeenMessages");
+                    b.Navigation("RoomMembers");
                 });
 
             modelBuilder.Entity("ChatApp.Core.Models.UserModel", b =>
                 {
                     b.Navigation("Messages");
 
-                    b.Navigation("SeenMessages");
+                    b.Navigation("RefreshTokens");
 
-                    b.Navigation("UserChatRooms");
+                    b.Navigation("RoomMembers");
                 });
 #pragma warning restore 612, 618
         }

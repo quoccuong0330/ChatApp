@@ -4,10 +4,10 @@ using MediatR;
 
 namespace ChatApp.Application.Commands.User;
 
-public record  class RegisterCommand(UserModel userModel) : IRequest<UserModel>;
+public record   RegisterCommand(UserModel? userModel) : IRequest<UserModel>;
 
 public class RegisterCommandHandler(IUserRepository userRepository) : IRequestHandler<RegisterCommand, UserModel> {
-    public async Task<UserModel> Handle(RegisterCommand request, CancellationToken cancellationToken) {
+    public async Task<UserModel?> Handle(RegisterCommand request, CancellationToken cancellationToken) {
         return await userRepository.Register(request.userModel);
     }
 }

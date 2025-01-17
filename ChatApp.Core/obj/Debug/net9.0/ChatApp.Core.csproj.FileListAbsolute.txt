@@ -12,3 +12,4 @@
 /Users/macos/Documents/c#/ChatApp/ChatApp.Core/bin/Debug/net9.0/ChatApp.Core.runtimeconfig.json
 /Users/macos/Documents/c#/ChatApp/ChatApp.Core/obj/Debug/net9.0/ChatApp.Core.csproj.AssemblyReference.cache
 /Users/macos/Documents/c#/ChatApp/ChatApp.Core/obj/Debug/net9.0/ChatApp.Core.genruntimeconfig.cache
+/Users/macos/Documents/c#/ChatApp/ChatApp.Core/obj/Debug/net9.0/ChatApp.Core.sourcelink.json
