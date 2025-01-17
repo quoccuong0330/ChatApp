@@ -4,19 +4,14 @@ using Enum = ChatApp.Core.Enums.Enum;
 namespace ChatApp.Core.Models;
 
 
-public class ChatRoomModel {
+public class RoomMemberModel {
     [Key]
-    public Guid IdRoom  {get;set;}
-    [Required]
-    public Enum.RoomType Type{ get; set; }
-    public Guid? LastMessageId { get; set; }  
-    public MessageModel LastMessage { get; set; } 
-    [Required]
-    public DateTime CreatedAt {get;set;} = DateTime.UtcNow;
-    [Required]
-    public DateTime UpdatedAt  {get;set;}
-    
-    public ICollection<UserChatRoomModel> UserChatRooms { get; set; } =new List<UserChatRoomModel>();
-    public ICollection<MessageModel> Messages { get; set; } =new List<MessageModel>();
-    public ICollection<SeenMessageModel> SeenMessages { get; set; } =new List<SeenMessageModel>();
+    public Guid Id { get; set; }
+    public Guid RoomId { get; set; }
+    public Guid UserId { get; set; }
+    public DateTime JoinedAt { get; set; }
+
+    // Navigation Properties
+    public RoomModel Room { get; set; }
+    public UserModel User { get; set; }
 }

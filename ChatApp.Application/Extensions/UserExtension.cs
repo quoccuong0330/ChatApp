@@ -1,5 +1,4 @@
 namespace ChatApp.Application.Extensions;
 
-public class UserExtension {
-    
+public static class UserExtension {
 }

@@ -1,13 +1,14 @@
+using ChatApp.Application.Dtos.Responses.User;
 using ChatApp.Core.Interfaces;
 using MediatR;
 
 namespace ChatApp.Application.Commands.User;
 
-public record UpdatePasswordCommand(Guid Id, string oldPassword, string newPassword) : IRequest<bool>;
+public record UpdatePasswordCommand(UpdateUserDto.UpdatePasswordDto PasswordDto, Guid Id) : IRequest<RecordUserResponseDto>;
 
 public class UpdatePasswordCommandHandler(IUserRepository userRepository)
-    : IRequestHandler<UpdatePasswordCommand, bool> {
-    public async Task<bool> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken) {
-        return await userRepository.UpdatePassword(request.Id, request.oldPassword, request.newPassword);
+    : IRequestHandler<UpdatePasswordCommand, RecordUserResponseDto> {
+    public async Task<RecordUserResponseDto> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken) {
+        return await userRepository.UpdatePassword(request.PasswordDto, request.Id);
     }
 }
