@@ -1,13 +1,14 @@
+using ChatApp.Application.Dtos.Responses.User;
 using ChatApp.Core.Interfaces;
 using ChatApp.Core.Models;
 using MediatR;
 
 namespace ChatApp.Application.Commands.User;
 
-public record  UpdateInfoCommand(Guid id, UserModel userModel) : IRequest<UserModel?>;
+public record  UpdateInfoCommand(UpdateUserDto.UpdateInfoDto UpdateUserDto, Guid Id) : IRequest<RecordUserResponseDto>;
 
-public class UpdateInfoCommandHandler(IUserRepository userRepository) : IRequestHandler<UpdateInfoCommand, UserModel?> {
-    public async Task<UserModel?> Handle(UpdateInfoCommand request, CancellationToken cancellationToken) {
-        return await userRepository.UpdateUser(request.id, request.userModel);
+public class UpdateInfoCommandHandler(IUserRepository userRepository) : IRequestHandler<UpdateInfoCommand, RecordUserResponseDto> {
+    public async Task<RecordUserResponseDto> Handle(UpdateInfoCommand request, CancellationToken cancellationToken) {
+        return await userRepository.UpdateUser(request.UpdateUserDto, request.Id);
     }
 }

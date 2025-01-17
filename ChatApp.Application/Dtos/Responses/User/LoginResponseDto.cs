@@ -1,3 +1,4 @@
 namespace ChatApp.Application.Dtos.Responses.User;
 
-public record LoginResponse(bool Flag,string Message = null!, string Token = null!);
+public record LoginResponseDto(bool Flag,
+    string Message = null!, string AccessToken = null!, string RefreshToken = null!);

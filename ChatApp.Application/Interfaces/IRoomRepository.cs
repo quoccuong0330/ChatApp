@@ -1,18 +1,21 @@
+using ChatApp.Application.Dtos.Requests.Room;
+using ChatApp.Application.Dtos.Responses.Room;
 using ChatApp.Core.Models;
 
 namespace ChatApp.Core.Interfaces;
 
 public interface IRoomRepository {
-    public Task<RoomModel> CreateRoom(ICollection<Guid> members, Guid createUserId);
-    public Task<ICollection<RoomModel>> GetListRoomByUserId(Guid userId);
-    public Task<RoomModel?> GetDetailRoom(Guid roomId);
-    public Task<ICollection<RoomModel>> FindRoomByName(string name);
-    public Task<RoomModel?> UpdateAvatar(Guid idRoom, string avatar);
-    public Task<RoomModel?> UpdateName(Guid idRoom, string name);
-    public Task<bool> DeleteRoom(Guid roomId);
+    public Task<RecordRoomResponseDto> CreateRoom(CreateRoomDto createRoomDto, Guid ownerId);
+    public Task<ListRoomRecordDto> GetListRoomByUserId(Guid userId);
+    public Task<RecordRoomResponseDto> GetDetailRoom(Guid roomId, Guid idUser);
+    public Task<ListRoomRecordDto> FindRoomByName(string name);
+    public Task<RecordRoomResponseDto> UpdateAvatar(Guid idRoom, string avatar,  Guid idUser);
+    public Task<RecordRoomResponseDto> UpdateName(Guid idRoom, string name,  Guid idUser);
+    public Task<RecordRoomResponseDto> DeleteRoom(Guid roomId, Guid idUser);
 
-    public Task<bool> LeaveRoom(Guid idRoom, Guid idUser);
-    public Task<bool> KickMember(Guid idRoom, Guid idUser);
+    public Task<RecordRoomResponseDto> LeaveRoom(Guid idRoom, Guid idUser);
+    public Task<RecordRoomResponseDto> KickMember(Guid idRoom, Guid idMember, Guid idUser);
+    public Task<RecordRoomResponseDto> AddMember(Guid idRoom, Guid idMember, Guid idUser);
     public Task<ICollection<MessageModel>> FindMessageByRoomId(Guid idRoom);
 
 

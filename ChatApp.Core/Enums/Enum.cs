@@ -23,6 +23,5 @@ public class Enum {
     public enum RoleInRoom {
         Member = 0,
         Admin = 1,
-        
     }
 }
